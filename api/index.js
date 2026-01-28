@@ -5,7 +5,12 @@ import { createClient } from "@supabase/supabase-js";
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors(
+  {
+    origin: 'https://shoplinho.vercel.app', 
+    credentials: true
+  }
+));
 app.use(express.json());
 
 // ===== SUPABASE SETUP =====
@@ -155,6 +160,15 @@ app.post("/login", (req, res) => {
     username
   });
 });
+
+const PORT = process.env.PORT || 3001;
+
+
+if (process.env.VERCEL === undefined) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
 
 // 🚀 EXPORT — NO app.listen()
 export default app;
