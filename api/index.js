@@ -7,7 +7,7 @@ const app = express();
 // Middleware
 app.use(cors(
   {
-    origin: 'https://shoplinho.vercel.app', 
+    origin: 'https://shoplinno.vercel.app', 
     credentials: true
   }
 ));
