@@ -1,3 +1,11 @@
+// --- Setup for Environment Variables ---
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '.env') });
+
 import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
@@ -5,12 +13,22 @@ import { createClient } from "@supabase/supabase-js";
 const app = express();
 
 // Middleware
-app.use(cors(
-  {
-    origin: 'https://shoplinno.vercel.app', 
-    credentials: true
-  }
-));
+const corsOptions = {
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://shoplinno.vercel.app',
+      'http://127.0.0.1:5500',
+      'http://localhost:5500'
+    ];
+    if (process.env.VERCEL || !origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // ===== SUPABASE SETUP =====
@@ -18,53 +36,45 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SECRET_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error("❌ Missing Supabase environment variables");
+  console.error("❌ Missing Supabase environment variables. Make sure .env file is present in /api folder.");
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: { persistSession: false }
 });
 
-// ===== API ENDPOINTS =====
+// ===== API ROUTER =====
+const apiRouter = express.Router();
 
-// Health check
-app.get("/health", (req, res) => {
-  res.json({
-    status: "OK",
-    server_time: new Date().toISOString(),
-    endpoints: [
-      "/api/health",
-      "/api/test-db",
-      "/api/check-tables",
-      "/api/subscribe",
-      "/api/contact",
-      "/api/plans",
-      "/api/register",
-      "/api/login"
-    ]
-  });
-});
-
-// Test DB
-app.get("/test-db", async (req, res) => {
+apiRouter.get("/plans", async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from("subscriptions")
-      .select("*")
-      .limit(1);
+      .from("plans")
+      .select("id, name, price, features")
+      .order("price", { ascending: true });
 
     if (error) {
-      return res.json({ success: false, error: error.message });
+      console.error("Error fetching plans:", error);
+      return res.status(500).json({ error: "Could not fetch plans." });
     }
 
-    res.json({ success: true, table_count: data?.length || 0 });
+    res.json({ success: true, plans: data });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+
+// Health check
+apiRouter.get("/health", (req, res) => {
+  res.json({
+    status: "OK",
+    server_time: new Date().toISOString(),
+  });
+});
+
 // Subscribe
-app.post("/subscribe", async (req, res) => {
+apiRouter.post("/subscribe", async (req, res) => {
   try {
     const { user_id, plan_id, payment_method, customer_info } = req.body;
 
@@ -76,7 +86,7 @@ app.post("/subscribe", async (req, res) => {
     const endDate = new Date(startDate);
 
     if (plan_id === "monthly") endDate.setMonth(endDate.getMonth() + 1);
-    else if (plan_id === "2monthls") endDate.setMonth(endDate.getMonth() + 2);
+    else if (plan_id === "2months") endDate.setMonth(endDate.getMonth() + 2);
     else if (plan_id === "annual") endDate.setFullYear(endDate.getFullYear() + 1);
     else endDate.setMonth(endDate.getMonth() + 1);
 
@@ -86,83 +96,33 @@ app.post("/subscribe", async (req, res) => {
       start_date: startDate.toISOString(),
       end_date: endDate.toISOString(),
       status: "active",
-      created_at: new Date().toISOString()
     });
 
     const { error: msgError } = await supabase.from("messages").insert({
       user_id,
       subject: "New IPTV Subscription - " + customer_info.email,
-      message: `Name: ${customer_info.fullname}
-Email: ${customer_info.email}
-Phone: ${customer_info.phone || "N/A"}
-Plan: ${plan_id}
-Payment: ${payment_method}`,
-      created_at: new Date().toISOString()
+      message: `Name: ${customer_info.fullname}\nEmail: ${customer_info.email}\nPhone: ${customer_info.phone || "N/A"}\nPlan: ${plan_id}\nPayment: ${payment_method}`,
     });
+
+    if (subError || msgError) {
+        console.error("DB Error:", {subError, msgError});
+        return res.status(500).json({ error: "Failed to save data to database." });
+    }
 
     res.json({
       success: true,
-      saved_to_db: !subError && !msgError
+      saved_to_db: true
     });
   } catch (err) {
+    console.error("Server Error:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Contact
-app.post("/contact", async (req, res) => {
-  const { user_id, subject, message } = req.body;
-
-  if (!subject || !message) {
-    return res.status(400).json({ error: "Missing fields" });
-  }
-
-  await supabase.from("messages").insert({
-    user_id: user_id || "guest",
-    subject,
-    message,
-    created_at: new Date().toISOString()
-  });
-
-  res.json({ success: true });
-});
-
-// Plans
-app.get("/plans", (req, res) => {
-  res.json({
-    success: true,
-    plans: [
-      { id: 1, name: "Monthly Plan", price: 10 },
-      { id: 2, name: "2 Months Plan", price: 18 },
-      { id: 3, name: "Annual Plan", price: 70 }
-    ]
-  });
-});
-
-// Register
-app.post("/register", (req, res) => {
-  const { fullname, email } = req.body;
-  const userId = `user_${Date.now()}_${email.replace(/[@.]/g, "_")}`;
-
-  res.json({
-    success: true,
-    user_id: userId,
-    username: fullname.split(" ")[0] || "User"
-  });
-});
-
-// Login
-app.post("/login", (req, res) => {
-  const { username } = req.body;
-  res.json({
-    success: true,
-    user_id: `user_${Date.now()}`,
-    username
-  });
-});
+// Use the router for all /api routes
+app.use('/api', apiRouter);
 
 const PORT = process.env.PORT || 3001;
-
 
 if (process.env.VERCEL === undefined) {
   app.listen(PORT, () => {
@@ -170,5 +130,4 @@ if (process.env.VERCEL === undefined) {
   });
 }
 
-// 🚀 EXPORT — NO app.listen()
 export default app;

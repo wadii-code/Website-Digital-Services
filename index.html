@@ -22,7 +22,7 @@
       <a href="#sports">Sports</a>
       <a href="#content">Content</a>
       <a href="#pricing">Pricing</a>
-      <a href="#login">Login</a>
+      <a href="#login" onclick="toggleLogin(); return false;">Login</a>
     </nav>
   </div>
 </header>
@@ -77,6 +77,7 @@
     </div>
   </div>
 </section>
+
 <section id="sports" class="sports">
   <div class="container">
     <div class="sports-header">
@@ -88,7 +89,6 @@
     <div class="sports-scroll-container">
       <button class="scroll-btn scroll-left" onclick="scrollSports('left')">❮</button>
       <div class="sports-grid">
-
         <!-- DAZN -->
         <div class="sport-card">
           <div class="sport-card-header">
@@ -166,7 +166,6 @@
             <p>Sports Hub</p>
           </div>
         </div>
-
       </div>
       <button class="scroll-btn scroll-right" onclick="scrollSports('right')">❯</button>
     </div>
@@ -176,60 +175,53 @@
 <section id="sports-events" class="sports-events">
   <div class="container">
     <div class="sports-header">
-     
       <h2>Live Sports Events</h2>
     </div>
     <div class="sports-scroll-container">
       <button class="scroll-btn scroll-left" onclick="scrollSportsEvents('left')">❮</button>
       <div class="sports-events-grid">
-       
+        <!-- Football -->
         <div class="sport-card">
           <div class="sport-card-header">
-           
+            <!-- Removed extra images, keeping only one -->
           </div>
-          <img src="img/360_F_817105185_7oWLF4mZciA0Kj92VKOIM6sOh8TfJcAg.jpg"   alt="Football" class="sport-card-img big-img">
-          <img src="img/images (3).jfif">
-          <img src="img/основные-rgb-official-uefa-european-top-league-logos-set-football-soccer-leagues-logo-premier-laliga-serie-262254180.webp">
+          <img src="img/360_F_817105185_7oWLF4mZciA0Kj92VKOIM6sOh8TfJcAg.jpg" alt="Football" class="sport-card-img big-img">
           <div class="sport-card-footer">
             <h4>Football</h4>
             <p>Live football matches</p>
           </div>
         </div>
 
-       
+        <!-- Basketball -->
         <div class="sport-card">
           <div class="sport-card-header">
-            
+            <!-- Removed extra images -->
           </div>
           <img src="img/Michael-Jordan.webp" alt="Basketball" class="sport-card-img big-img">
-          <img src="img/nba-logo-design.webp">
           <div class="sport-card-footer">
             <h4>Basketball</h4>
             <p>NBA & International</p>
           </div>
         </div>
 
-        
+        <!-- Tennis -->
         <div class="sport-card">
           <div class="sport-card-header">
-            
+            <!-- Removed extra images -->
           </div>
           <img src="img/tennis-1.webp" alt="Tennis" class="sport-card-img big-img">
-          <img src="img/Roger-Federer-2012.webp">
           <div class="sport-card-footer">
             <h4>Tennis</h4>
             <p>Grand Slam tournaments</p>
           </div>
         </div>
 
-        
+        <!-- UFC -->
         <div class="sport-card">
           <div class="sport-card-header">
-            
+            <!-- Removed extra images -->
           </div>
           <img src="img/rio-de-janeiro-brazil-january-260nw-2253186927.webp" alt="UFC" class="sport-card-img big-img">
-          <img src="img/Nurmagomedov Khabib Weigh In 229 Hero.avif">
-          <img src="img/hq720.jpg">
           <div class="sport-card-footer">
             <h4>UFC</h4>
             <p>Mixed martial arts</p>
@@ -247,42 +239,35 @@
     <p class="section-subtitle">Binge your favorite movies and series in stunning quality</p>
     <div class="content-gallery">
       <div class="content-card">
-        <img src="img/ej1ue59wwaauaaa.jpg">
-        
+        <img src="img/ej1ue59wwaauaaa.jpg" alt="Fantasy Series">
         <p>Fantasy adventure series</p>
       </div>
       <div class="content-card">
-        <img src="img/game-of-thrones.jpg" >
+        <img src="img/game-of-thrones.jpg" alt="Game of Thrones">
         <p>Epic fantasy series</p>
       </div>
       <div class="content-card">
-        <img src="img/Breaking_bad_s2.webp">
-        
+        <img src="img/Breaking_bad_s2.webp" alt="Breaking Bad">
         <p>Crime thriller series</p>
       </div>
       <div class="content-card">
-        <img src="img/outer-banks-16-month-2025-2026-wall-calendar-with-bonus-poster-9781419782473_hr.jpg" >
-        
+        <img src="img/outer-banks-16-month-2025-2026-wall-calendar-with-bonus-poster-9781419782473_hr.jpg" alt="Outer Banks">
         <p>Adventure & mystery</p>
       </div>
       <div class="content-card">
         <img src="img/Stranger_Things_logo.png" alt="Stranger Things">
-        
         <p>Sci-fi supernatural series</p>
       </div>
       <div class="content-card">
         <img src="img/Dark-affiche-1024x716.jpg" alt="Dark">
-        
         <p>Mystery & time travel</p>
       </div>
       <div class="content-card">
         <img src="img/818TrulDKmL._AC_UF894,1000_QL80_.jpg" alt="The Sopranos">
-        
         <p>Crime drama series</p>
       </div>
       <div class="content-card">
         <img src="img/89344_vod_thumb_415005.webp" alt="Chernobyl">
-        
         <p>Historical drama series</p>
       </div>
       <div class="content-card full-width-banner">
@@ -351,18 +336,18 @@
           <div class="form-row">
             <div class="form-group">
               <label for="fullname">Full Name</label>
-              <input type="text" id="fullname" name="fullname" placeholder="wadii bogos" required>
+              <input type="text" id="fullname" name="fullname" placeholder="John Doe" required>
             </div>
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" placeholder="wadii@gmail.com" required>
+              <input type="email" id="email" name="email" placeholder="john@example.com" required>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" placeholder="+212 700 000 000">
+              <input type="tel" id="phone" name="phone" placeholder="+1 234 567 8900">
             </div>
             <div class="form-group">
               <label for="country">Country</label>
@@ -398,24 +383,24 @@
           <div class="summary-item">
             <div>
               <span class="plan-name">Selected Plan</span>
-              <p class="plan-type" id="planType">Monthly Plan</p>
+              <p class="plan-type" id="planType">No plan selected</p>
             </div>
-            <span class="plan-price" id="planPrice">$10.00</span>
+            <span class="plan-price" id="planPrice">$0.00</span>
           </div>
           
           <div class="summary-divider"></div>
 
           <div class="summary-item">
             <span>Subtotal</span>
-            <span id="subtotal">$10.00</span>
+            <span id="subtotal">$0.00</span>
           </div>
           <div class="summary-item">
             <span>Tax (estimated)</span>
-            <span id="tax">$0.80</span>
+            <span id="tax">$0.00</span>
           </div>
           <div class="summary-item total">
             <span>Total</span>
-            <span id="total">$10.80</span>
+            <span id="total">$0.00</span>
           </div>
         </div>
 
@@ -452,6 +437,20 @@
   </div>
 </section>
 
+<!-- CONTACT SECTION (moved here for proper flow) -->
+<section class="contact-section">
+  <div class="container">
+    <h2>📞 Contact Us</h2>
+    <p class="section-subtitle">Have questions? We're here to help. Send us a message!</p>
+    <div class="contact-form">
+      <input type="text" id="contact-name" placeholder="Your Name">
+      <input type="email" id="contact-email" placeholder="Your Email">
+      <textarea id="contact-message" placeholder="Your Message" rows="5"></textarea>
+      <button onclick="submitContactForm()" class="btn-primary">Send Message</button>
+    </div>
+  </div>
+</section>
+
 <section id="login-cta" class="login-cta-section">
   <div class="container">
     <div class="login-cta-card">
@@ -462,6 +461,7 @@
   </div>
 </section>
 
+<!-- LOGIN/REGISTRATION MODAL -->
 <section id="login" class="login-section">
   <div class="login-form-wrapper">
     <button class="close-login" onclick="toggleLogin()">&times;</button>
@@ -469,10 +469,10 @@
     <!-- Login Form -->
     <div id="login-form-container" class="form-container active">
       <h2>Client Login</h2>
-      <form action="login.php" method="POST" class="login-form">
+      <form class="login-form">
         <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+          <label for="username">Username or Email</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -486,21 +486,14 @@
     <!-- Sign Up Form -->
     <div id="signup-form-container" class="form-container">
       <h2>Create an Account</h2>
-      <form class="signup-form" onsubmit="handleSignup(event)">
+      <form class="signup-form">
         <div class="form-group">
           <label for="signup-fullname">Full Name <span class="required">*</span></label>
           <input type="text" id="signup-fullname" name="fullname" placeholder="Enter your full name" required>
         </div>
         <div class="form-group">
+          <label for="signup-email">Email <span class="required">*</span></label>
           <input type="email" id="signup-email" name="email" placeholder="Enter your email" required>
-        </div>
-        <div class="form-group">
-          <label for="signup-phone">Phone Number</label>
-          <input type="tel" id="signup-phone" name="phone" placeholder="Enter your phone number">
-        </div>
-        <div class="form-group">
-          <label for="signup-username">Username <span class="required">*</span></label>
-          <input type="text" id="signup-username" name="username" placeholder="Choose a username" required>
         </div>
         <div class="form-group">
           <label for="signup-password">Password <span class="required">*</span></label>
@@ -509,10 +502,6 @@
         <div class="form-group">
           <label for="signup-confirm-password">Confirm Password <span class="required">*</span></label>
           <input type="password" id="signup-confirm-password" name="confirm-password" placeholder="Confirm your password" required>
-        </div>
-        <div class="form-group">
-          <label for="signup-country">Country <span class="required">*</span></label>
-          <input type="text" id="signup-country" name="country" placeholder="Enter your country" required>
         </div>
         <button type="submit" class="btn-primary btn-large">Create Account</button>
       </form>
@@ -534,7 +523,7 @@
           <li><a href="#features">Features</a></li>
           <li><a href="#content">Content</a></li>
           <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#login">Login</a></li>
+          <li><a href="#login" onclick="toggleLogin(); return false;">Login</a></li>
         </ul>
       </div>
       <div class="footer-section">
@@ -545,11 +534,9 @@
           <a href="mailto:Shoplinnocentre@gmail.com" target="_blank" title="Email">
             <img src="img/icones-google-icones-gmail-illustration-vectorielle-modifiable_981536-461.avif" alt="Gmail" class="contact-icon">
           </a>
-
           <a href="https://wa.me/212620627929" target="_blank" title="WhatsApp">
             <img src="img/images (1).jfif" alt="WhatsApp" class="contact-icon">
           </a>
-
         </div>
       </div>
     </div>
@@ -559,22 +546,6 @@
   </div>
 </footer>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 </body>
 </html>
-
-<section class="contact-section">
-  <h2>📞 Contact Us</h2>
-  <p class="section-subtitle">Have questions? We're here to help. Send us a message!</p>
-  <div class="contact-form">
-    <input type="text" id="contact-name" placeholder="Your Name">
-    <input type="email" id="contact-email" placeholder="Your Email">
-    <textarea id="contact-message" placeholder="Your Message" rows="5"></textarea>
-    <button onclick="submitContactForm()" class="btn-primary">Send Message</button>
-  </div>
-</section>
-
-</body>
-</html>
-

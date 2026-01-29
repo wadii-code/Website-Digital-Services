@@ -1,0 +1,20 @@
+# Dependencies
+/node_modules
+/api/node_modules
+
+# Environment variables
+.env
+/api/.env
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE and editor directories
+.vscode
+.idea
+
+# OS-generated files
+.DS_Store
+Thumbs.db

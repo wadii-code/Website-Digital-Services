@@ -1,11 +1,6 @@
+
 // script.js - UPDATED TO SHOW ERRORS
 const API_BASE = 'http://localhost:3001/api';
-
-// ===== Email Validation =====
-function isValidEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
 
 // ===== Sports Carousel Scroll ===== 
 function scrollSports(direction) {
@@ -77,14 +72,8 @@ async function processPayment() {
   const country = document.getElementById('country').value;
   const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
   
-  // Email validation for checkout
   if (!fullname || !email) {
     alert('Please enter your name and email');
-    return;
-  }
-  
-  if (!isValidEmail(email)) {
-    alert('Please enter a valid email address.');
     return;
   }
 
@@ -163,12 +152,6 @@ async function handleSignup(e) {
   const password = document.getElementById('signup-password').value;
   const confirmPassword = document.getElementById('signup-confirm-password').value;
   
-  // Email validation
-  if (!isValidEmail(email)) {
-    alert('Please enter a valid email address.');
-    return;
-  }
-
   if (password !== confirmPassword) {
     alert('Passwords do not match');
     return;
@@ -209,12 +192,6 @@ if (loginForm) {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     
-    // Email validation for login (if username is email)
-    if (username.includes('@') && !isValidEmail(username)) {
-      alert('Please enter a valid email address.');
-      return;
-    }
-    
     try {
       const response = await fetch(`${API_BASE}/login`, {
         method: 'POST',
@@ -245,43 +222,14 @@ if (loginForm) {
 // ===== Update UI ===== 
 function updateLoginStatus() {
   const userData = localStorage.getItem('iptv_user');
-  const signupSection = document.getElementById('signup-form-container');
-  
   if (userData) {
     const user = JSON.parse(userData);
     const loginLink = document.querySelector('a[href="#login"]');
-    
-    // Update login link to show username with logout option
     if (loginLink) {
       loginLink.textContent = `👤 ${user.username}`;
       loginLink.href = '#';
       loginLink.onclick = () => {
-        if (confirm('Do you want to log out?')) {
-          localStorage.removeItem('iptv_user');
-          location.reload(); // Reload the page to reset state
-        }
-      };
-    }
-    
-    // Hide signup section if user is logged in
-    if (signupSection) {
-      signupSection.style.display = 'none';
-    }
-    
-  } else {
-    // Show signup section if user is not logged in
-    if (signupSection) {
-      signupSection.style.display = 'block';
-    }
-    
-    // Reset login link to default
-    const loginLink = document.querySelector('a[href="#login"]');
-    if (loginLink) {
-      loginLink.textContent = 'Login';
-      loginLink.href = '#login';
-      loginLink.onclick = (e) => {
-        e.preventDefault();
-        toggleLogin();
+        alert(`Logged in as: ${user.username}\nUser ID: ${user.user_id}`);
       };
     }
   }
@@ -292,12 +240,6 @@ function submitContactForm() {
   const name = document.getElementById('contact-name')?.value || 'Not provided';
   const email = document.getElementById('contact-email')?.value || 'Not provided';
   const message = document.getElementById('contact-message')?.value || 'Not provided';
-  
-  // Email validation for contact form
-  if (email && !isValidEmail(email)) {
-    alert('Please enter a valid email address.');
-    return;
-  }
   
   const userData = localStorage.getItem('iptv_user');
   const userId = userData ? JSON.parse(userData).user_id : 'guest';
@@ -325,47 +267,12 @@ function submitContactForm() {
   });
 }
 
-// ===== TEST DATABASE CONNECTION =====
-async function testDatabase() {
-  try {
-    const response = await fetch(`${API_BASE}/test-db`);
-    const result = await response.json();
-    console.log('🔍 Database test result:', result);
-    alert('Database test: ' + (result.success ? '✅ Connected' : '❌ Failed - ' + result.error));
-  } catch (error) {
-    console.error('Database test failed:', error);
-    alert('❌ Cannot connect to backend server');
-  }
-}
-
-async function checkTables() {
-  try {
-    const response = await fetch(`${API_BASE}/check-tables`);
-    const result = await response.json();
-    console.log('📊 Tables check:', result);
-    
-    if (result.success) {
-      let message = 'Database Tables Status:\n\n';
-      message += `Subscriptions: ${result.tables.subscriptions.exists ? '✅' : '❌'}\n`;
-      message += `Messages: ${result.tables.messages.exists ? '✅' : '❌'}\n`;
-      message += `Plans: ${result.tables.plans.exists ? '✅' : '❌'}\n`;
-      alert(message);
-    }
-  } catch (error) {
-    console.error('Check tables failed:', error);
-  }
-}
 
 // ===== Initialize ===== 
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialize login status
   updateLoginStatus();
   
-  // Attach signup form handler
-  const signupForm = document.querySelector('.signup-form');
-  if (signupForm) {
-    signupForm.addEventListener('submit', handleSignup);
-  }
+  
   
   // Smooth scroll for links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -379,12 +286,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Close login on background click
-  const loginSection = document.getElementById('login');
-  if (loginSection) {
-    loginSection.addEventListener('click', function(e) {
-      if (e.target === this) toggleLogin();
-    });
-  }
+  document.getElementById('login').addEventListener('click', function(e) {
+    if (e.target === this) toggleLogin();
+  });
   
   console.log('✅ IPTV Website Script Loaded');
   console.log('📡 API Base URL:', API_BASE);
